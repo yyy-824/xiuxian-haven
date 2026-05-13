@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #1a1a2e;
+  --color-paper: #f5f0e8;
+  --color-paper-dark: #e8dfd2;
+  --color-gold: #c9a96e;
+  --color-gold-light: #e8d5a8;
+  --color-cinnabar: #c23b22;
+  --color-jade: #4a7c59;
+  --color-jade-light: #6b9f78;
+  --color-spirit: #5b7bb5;
+  --color-spirit-light: #8aa8d4;
+  --color-demon: #8b2252;
+  --color-void: #2d1b4e;
+  --color-qi: #d4a574;
+
+  --font-display: 'Noto Serif SC', 'STSong', serif;
+  --font-body: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+@font-face {
+  font-family: 'Noto Serif SC';
+  src: local('Noto Serif SC');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: local('Noto Sans SC');
+  font-display: swap;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 水墨纹理背景 */
+.bg-ink-texture {
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(74, 124, 89, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(91, 123, 181, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(201, 169, 110, 0.05) 0%, transparent 50%);
+  background-color: var(--color-ink);
+}
+
+/* 卷轴纹理 */
+.scroll-bg {
+  background:
+    linear-gradient(to right, rgba(201, 169, 110, 0.1) 0%, transparent 3%, transparent 97%, rgba(201, 169, 110, 0.1) 100%),
+    linear-gradient(to bottom, rgba(201, 169, 110, 0.05) 0%, transparent 5%, transparent 95%, rgba(201, 169, 110, 0.05) 100%);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+/* 灵气流动动画 */
+@keyframes spirit-flow {
+  0%, 100% { opacity: 0.3; transform: translateY(0) scale(1); }
+  50% { opacity: 0.8; transform: translateY(-10px) scale(1.05); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(201, 169, 110, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(201, 169, 110, 0.6); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-spirit { animation: spirit-flow 3s ease-in-out infinite; }
+.animate-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 25%, rgba(201, 169, 110, 0.1) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* 卡片悬浮效果 */
+.card-hover {
+  transition: all 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(201, 169, 110, 0.15);
+}
+
+/* 进度条动画 */
+.progress-bar {
+  transition: width 0.5s ease-out;
+}
+
+/* 按钮点击反馈 */
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* 渐变文字 */
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: rgba(26, 26, 46, 0.3); }
+::-webkit-scrollbar-thumb { background: rgba(201, 169, 110, 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(201, 169, 110, 0.5); }
+
+/* 选中高亮 */
+::selection {
+  background: rgba(201, 169, 110, 0.3);
+  color: var(--color-paper);
+}
+
+/* 禁用状态 */
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* 移动端适配 */
+@media (max-width: 640px) {
+  .font-display {
+    font-size: 0.9em;
+  }
+}
