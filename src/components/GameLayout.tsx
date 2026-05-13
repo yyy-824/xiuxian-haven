@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useGameStore } from '../store/gameStore'
+import { soundManager } from '../utils/sound'
 import { HavenPanel } from './panels/HavenPanel'
 import { DisciplesPanel } from './panels/DisciplesPanel'
 import { ExplorePanel } from './panels/ExplorePanel'
@@ -8,6 +9,7 @@ import { TopBar } from './TopBar'
 import { MessageLog } from './MessageLog'
 import { EventModal } from './EventModal'
 import { VisitorModal } from './VisitorModal'
+import { SettingsPanel } from './SettingsPanel'
 import { motion, AnimatePresence } from 'framer-motion'
 
 type Tab = 'haven' | 'disciples' | 'explore' | 'quest'
@@ -21,11 +23,27 @@ const TABS: { key: Tab; label: string; icon: string }[] = [
 
 export function GameLayout() {
   const [activeTab, setActiveTab] = useState<Tab>('haven')
+  const [showSettings, setShowSettings] = useState(false)
   const tick = useGameStore(s => s.tick)
   const settings = useGameStore(s => s.settings)
   const saveGame = useGameStore(s => s.saveGame)
   const tickRef = useRef(tick)
   tickRef.current = tick
+
+  // 初始化音效设置
+  useEffect(() => {
+    soundManager.setEnabled(settings.soundEnabled)
+    soundManager.setBgmEnabled(settings.bgmEnabled)
+    soundManager.setVolume(settings.soundVolume)
+    soundManager.setBgmVolume(settings.bgmVolume)
+    // 启动 BGM（用户交互后才能播放）
+    const startBgm = () => {
+      soundManager.playGeneratedBgm()
+      document.removeEventListener('click', startBgm)
+    }
+    document.addEventListener('click', startBgm)
+    return () => document.removeEventListener('click', startBgm)
+  }, [])
 
   // 游戏主循环
   useEffect(() => {
@@ -46,7 +64,7 @@ export function GameLayout() {
 
   return (
     <div className="h-full flex flex-col bg-ink-texture relative">
-      <TopBar />
+      <TopBar onSettings={() => setShowSettings(true)} />
 
       {/* 标签栏 */}
       <div className="flex border-b border-gold/20 bg-ink/80 backdrop-blur-sm">
@@ -101,6 +119,9 @@ export function GameLayout() {
 
       {/* 访客弹窗 */}
       <VisitorModal />
+
+      {/* 设置面板 */}
+      {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
     </div>
   )
 }

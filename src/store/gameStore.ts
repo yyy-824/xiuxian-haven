@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { GameState, Disciple, Room, GameMessage, ActiveBuff, ActiveEvent } from '../data/types'
+import { soundManager } from '../utils/sound'
 import {
   GAME_CONFIG, REALMS, generateId, getNextRealm, REALMS_MAP,
   SURNAMES, MALE_NAMES, FEMALE_NAMES, TRAITS, ELEMENTS, ROOM_TEMPLATES,
@@ -50,6 +51,10 @@ interface GameStore extends GameState {
   // === 设置 ===
   setGameSpeed: (speed: number) => void
   toggleAutoSave: () => void
+  toggleSound: () => void
+  toggleBgm: () => void
+  setSoundVolume: (v: number) => void
+  setBgmVolume: (v: number) => void
 }
 
 function randomFrom<T>(arr: T[]): T {
@@ -168,6 +173,9 @@ function createInitialState(): GameState {
       autoSaveInterval: GAME_CONFIG.AUTO_SAVE_INTERVAL,
       gameSpeed: 1,
       soundEnabled: true,
+      bgmEnabled: true,
+      soundVolume: 0.5,
+      bgmVolume: 0.3,
       notificationsEnabled: true,
     },
   }
@@ -194,6 +202,7 @@ export const useGameStore = create<GameStore>()(
             spiritStones: state.resources.spiritStones - cost,
           },
         }))
+        soundManager.recruit()
         get().addMessage({
           type: 'success',
           text: `花费💎${cost}招募新弟子 ${newDisciple.name}（${newDisciple.spiritualRoot.name}）！`,
@@ -202,6 +211,7 @@ export const useGameStore = create<GameStore>()(
         const ach = (get().achievements ?? []).find(a => a.id === 'ach_first_recruit')
         if (ach && !ach.unlocked) {
           set(state => ({ achievements: state.achievements.map(a => a.id === 'ach_first_recruit' ? { ...a, unlocked: true, unlockedAt: state.gameTime } : a) }))
+          soundManager.achievement()
           get().addMessage({ type: 'event', text: '🏆 成就解锁：初入仙途！' })
         }
         return newDisciple
@@ -325,6 +335,7 @@ export const useGameStore = create<GameStore>()(
             disciples: newDisciples,
           }
         })
+        soundManager.pill()
         get().addMessage({ type: 'success', text: `${disciple.name}使用了${pillName}！` })
       },
 
@@ -347,6 +358,7 @@ export const useGameStore = create<GameStore>()(
               : d
           ),
         }))
+        soundManager.equip()
         get().addMessage({ type: 'success', text: `${disciple.name}装备了${artifact.name}！` })
       },
 
@@ -422,6 +434,7 @@ export const useGameStore = create<GameStore>()(
         })
 
         if (success) {
+          soundManager.craftSuccess()
           get().addMessage({ type: 'success', text: `炼丹成功！获得${recipe.name}（${Math.round(successRate * 100)}%成功率）` })
           const ach = (get().achievements ?? []).find(a => a.id === 'ach_craft_pill')
           if (ach && !ach.unlocked) {
@@ -429,6 +442,7 @@ export const useGameStore = create<GameStore>()(
             get().addMessage({ type: 'event', text: '🏆 成就解锁：丹道初窥！' })
           }
         } else {
+          soundManager.craftFail()
           get().addMessage({ type: 'danger', text: `炼丹失败！${recipe.name}化为灰烬...（${Math.round(successRate * 100)}%成功率）` })
         }
       },
@@ -490,6 +504,7 @@ export const useGameStore = create<GameStore>()(
         })
 
         if (success) {
+          soundManager.craftSuccess()
           get().addMessage({ type: 'success', text: `锻造成功！获得${recipe.artifact.name}（${Math.round(successRate * 100)}%成功率）` })
           const ach = (get().achievements ?? []).find(a => a.id === 'ach_forge_artifact')
           if (ach && !ach.unlocked) {
@@ -497,6 +512,7 @@ export const useGameStore = create<GameStore>()(
             get().addMessage({ type: 'event', text: '🏆 成就解锁：器道入门！' })
           }
         } else {
+          soundManager.craftFail()
           get().addMessage({ type: 'danger', text: `锻造失败！材料化为废铁...（${Math.round(successRate * 100)}%成功率）` })
         }
       },
@@ -665,6 +681,7 @@ export const useGameStore = create<GameStore>()(
             default: break
           }
           if (unlock) {
+            soundManager.achievement()
             get().addMessage({ type: 'event', text: `🏆 成就解锁：${ach.name}！` })
             return { ...ach, unlocked: true, unlockedAt: state.gameTime }
           }
@@ -709,6 +726,7 @@ export const useGameStore = create<GameStore>()(
           }
           if (done) {
             changed = true
+            soundManager.notify()
             get().addMessage({ type: 'event', text: `📜 主线完成：${q.title}！点击领取奖励。` })
             return { ...q, completed: true, rewardClaimed: false }
           }
@@ -752,6 +770,7 @@ export const useGameStore = create<GameStore>()(
             mainQuests: s.mainQuests.map(q => q.id === questId ? { ...q, rewardClaimed: true } : q),
           }
         })
+        soundManager.success()
         get().addMessage({ type: 'success', text: `📜 领取奖励：${quest.title} — ${quest.reward.description || '获得奖励'}` })
       },
 
@@ -799,11 +818,13 @@ export const useGameStore = create<GameStore>()(
           }
         })
 
+        soundManager.build()
         get().addMessage({ type: 'success', text: `建造了${type}！` })
         // 成就检查
         const ach = (get().achievements ?? []).find(a => a.id === 'ach_first_build')
         if (ach && !ach.unlocked) {
           set(state => ({ achievements: state.achievements.map(a => a.id === 'ach_first_build' ? { ...a, unlocked: true, unlockedAt: state.gameTime } : a) }))
+          soundManager.achievement()
           get().addMessage({ type: 'event', text: '🏆 成就解锁：开山立派！' })
         }
       },
@@ -857,6 +878,7 @@ export const useGameStore = create<GameStore>()(
           }
         })
 
+        soundManager.upgrade()
         get().addMessage({ type: 'success', text: `${room.type}升级到${room.level + 1}级！` })
       },
 
@@ -915,6 +937,7 @@ export const useGameStore = create<GameStore>()(
           }
         })
 
+        soundManager.upgrade()
         get().addMessage({ type: 'success', text: `🎉 洞府升级到${level + 1}级！护山强度+5，灵气浓度+0.2` })
       },
 
@@ -944,6 +967,7 @@ export const useGameStore = create<GameStore>()(
           ),
         }))
 
+        soundManager.explore()
         get().addMessage({ type: 'info', text: `${disciple.name}出发${taskData.name}！` })
       },
 
@@ -1138,6 +1162,7 @@ export const useGameStore = create<GameStore>()(
                   id: generateId(), timestamp: Date.now(), type: 'success', read: false,
                   text: `🎉 ${d.name}突破成功！晋升${nextRealm}境！`,
                 })
+                soundManager.breakthrough()
               }
               // 失败不扣修为，只是等下次 tick
             } else {
@@ -1210,6 +1235,7 @@ export const useGameStore = create<GameStore>()(
                   ? `⚔ ${disciple.name}击败了${enemy.name}！${combatSummary}`
                   : `💀 ${disciple.name}不敌${enemy.name}，重伤而归。${combatSummary}`,
               })
+              soundManager.combat()
             }
 
             // 发放基础奖励
@@ -1308,6 +1334,7 @@ export const useGameStore = create<GameStore>()(
               id: generateId(), timestamp: Date.now(), type: 'event', read: false,
               text: `🚪 ${visitor.name}到访洞府！`,
             })
+            soundManager.visitor()
           }
         }
 
@@ -1361,6 +1388,32 @@ export const useGameStore = create<GameStore>()(
         set(state => ({
           settings: { ...state.settings, autoSave: !state.settings.autoSave },
         }))
+      },
+
+      toggleSound: () => {
+        set(state => {
+          const enabled = !state.settings.soundEnabled
+          soundManager.setEnabled(enabled)
+          return { settings: { ...state.settings, soundEnabled: enabled } }
+        })
+      },
+
+      toggleBgm: () => {
+        set(state => {
+          const enabled = !state.settings.bgmEnabled
+          soundManager.setBgmEnabled(enabled)
+          return { settings: { ...state.settings, bgmEnabled: enabled } }
+        })
+      },
+
+      setSoundVolume: (v) => {
+        soundManager.setVolume(v)
+        set(state => ({ settings: { ...state.settings, soundVolume: v } }))
+      },
+
+      setBgmVolume: (v) => {
+        soundManager.setBgmVolume(v)
+        set(state => ({ settings: { ...state.settings, bgmVolume: v } }))
       },
     }),
     {

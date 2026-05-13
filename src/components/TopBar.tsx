@@ -10,7 +10,7 @@ function formatGameTime(ms: number): string {
   return `${seconds}秒`
 }
 
-export function TopBar() {
+export function TopBar({ onSettings }: { onSettings: () => void }) {
   const resources = useGameStore(s => s.resources)
   const haven = useGameStore(s => s.haven)
   const disciples = useGameStore(s => s.disciples)
@@ -79,6 +79,13 @@ export function TopBar() {
               </button>
             ))}
           </div>
+          <button
+            onClick={onSettings}
+            className="text-xs text-paper/40 hover:text-gold px-2 py-0.5 rounded-full hover:bg-gold/10 transition-all"
+            title="设置"
+          >
+            ⚙
+          </button>
           <button
             onClick={saveGame}
             className="text-xs text-paper/40 hover:text-gold px-2 py-0.5 rounded-full hover:bg-gold/10 transition-all"

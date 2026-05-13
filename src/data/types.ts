@@ -298,5 +298,8 @@ export interface GameSettings {
   autoSaveInterval: number // 毫秒
   gameSpeed: number // 1x, 2x, 5x
   soundEnabled: boolean
+  bgmEnabled: boolean
+  soundVolume: number // 0-1
+  bgmVolume: number // 0-1
   notificationsEnabled: boolean
 }
