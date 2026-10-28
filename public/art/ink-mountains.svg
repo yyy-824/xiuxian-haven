@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#172339" stop-opacity="0"/>
+      <stop offset="1" stop-color="#213449" stop-opacity=".66"/>
+    </linearGradient>
+    <linearGradient id="far" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#79919a" stop-opacity=".43"/>
+      <stop offset="1" stop-color="#3f5662" stop-opacity=".08"/>
+    </linearGradient>
+    <linearGradient id="near" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#425d66" stop-opacity=".52"/>
+      <stop offset="1" stop-color="#172638" stop-opacity=".12"/>
+    </linearGradient>
+    <radialGradient id="moon">
+      <stop stop-color="#e8d5a8" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#e8d5a8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mist" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#c4d0c4" stop-opacity="0"/>
+      <stop offset=".48" stop-color="#c4d0c4" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#c4d0c4" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h1600v700H0z"/>
+  <circle cx="1210" cy="195" r="168" fill="url(#moon)"/>
+  <circle cx="1210" cy="195" r="37" fill="none" stroke="#e8d5a8" stroke-opacity=".24" stroke-width="1"/>
+  <path fill="url(#far)" d="M0 460 70 407l58 15 75-100 37 35 58-114 52 71 39-25 59 101 52-54 76 82 69-109 51 65 49-94 55 65 62-102 51 93 60-58 77 104 56-80 84 89 63-132 53 64 49-43 81 85 84-59v364H0z"/>
+  <path fill="none" stroke="#c3d2c5" stroke-opacity=".15" d="m124 422 79-100 37 35 58-114 52 71m358 60 49-94 55 65 62-102 51 93m327 46 63-132 53 64"/>
+  <path fill="url(#near)" d="M0 536 72 492l52 19 54-75 47 38 64-79 58 63 77-30 62 64 85-80 73 79 62-42 69 79 62-49 58 35 64-84 69 74 59-44 67 78 75-55 72 64 75-48 66 34v167H0z"/>
+  <path d="M-100 516c186-33 323 42 491 17 198-30 273-9 438 14 196 26 361-37 574-18 96 9 175 25 269 16" fill="none" stroke="url(#mist)" stroke-width="35"/>
+  <path d="M-90 603c187-19 323 38 513 4 174-31 327-19 501 4 205 27 348-39 550-14 92 11 148 19 219 12" fill="none" stroke="url(#mist)" stroke-width="48"/>
+  <g fill="#dfc48e" opacity=".45">
+    <circle cx="251" cy="365" r="1.5"/><circle cx="537" cy="443" r="1"/><circle cx="1055" cy="338" r="1.3"/><circle cx="1378" cy="443" r="1.5"/><circle cx="1498" cy="328" r="1"/>
+  </g>
+</svg>

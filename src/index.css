@@ -15,8 +15,8 @@
   --color-void: #2d1b4e;
   --color-qi: #d4a574;
 
-  --font-display: 'Noto Serif SC', 'STSong', serif;
-  --font-body: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  --font-display: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
+  --font-body: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --font-mono: 'Fira Code', monospace;
 }
 
@@ -30,12 +30,6 @@
   font-family: 'Noto Sans SC';
   src: local('Noto Sans SC');
   font-display: swap;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
 html, body, #root {
@@ -141,6 +135,22 @@ body {
 /* 禁用状态 */
 button:disabled {
   cursor: not-allowed;
+}
+
+/* 键盘操作时的焦点需在深浅背景上都清晰可见。 */
+:focus-visible {
+  outline: 2px solid var(--color-gold-light);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(26, 26, 46, 0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* 移动端适配 */

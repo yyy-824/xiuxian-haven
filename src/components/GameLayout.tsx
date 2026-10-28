@@ -10,6 +10,7 @@ import { MessageLog } from './MessageLog'
 import { EventModal } from './EventModal'
 import { VisitorModal } from './VisitorModal'
 import { SettingsPanel } from './SettingsPanel'
+import { AmbientEffects } from './AmbientEffects'
 import { motion, AnimatePresence } from 'framer-motion'
 
 type Tab = 'haven' | 'disciples' | 'explore' | 'quest'
@@ -64,16 +65,19 @@ export function GameLayout() {
 
   return (
     <div className="h-full flex flex-col bg-ink-texture relative">
+      <AmbientEffects />
       <TopBar onSettings={() => setShowSettings(true)} />
 
       {/* 标签栏 */}
-      <div className="flex border-b border-gold/20 bg-ink/80 backdrop-blur-sm">
+      <nav aria-label="主导航" className="relative z-10 flex justify-center border-b border-gold/20 bg-ink/85 px-6 backdrop-blur-sm">
+        <div className="flex w-full max-w-7xl">
         {TABS.map(tab => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
+            aria-current={activeTab === tab.key ? 'page' : undefined}
             className={`
-              flex-1 py-3 px-2 text-sm font-display transition-all relative btn-press
+              flex-1 py-4 px-4 text-base tracking-widest font-display transition-all relative btn-press
               ${activeTab === tab.key
                 ? 'text-gold bg-gold/10'
                 : 'text-paper/50 hover:text-paper/80 hover:bg-paper/5'
@@ -90,10 +94,11 @@ export function GameLayout() {
             )}
           </button>
         ))}
-      </div>
+        </div>
+      </nav>
 
       {/* 内容区 */}
-      <div className="flex-1 overflow-hidden">
+      <div className="relative z-10 mx-auto w-full max-w-7xl flex-1 overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}

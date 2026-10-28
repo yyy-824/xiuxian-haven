@@ -165,24 +165,24 @@ export function MessageLog() {
                     <div
                       key={msg.id}
                       className={`flex items-center gap-1.5 text-[11px] leading-snug ${
-                        msg.read ? 'opacity-25' : 'opacity-80'
+                        msg.read ? 'opacity-60' : 'opacity-100'
                       }`}
                     >
                       <span className={`${style.color} shrink-0 w-3 text-center text-[10px]`}>{style.icon}</span>
-                      <span className="text-paper/60 truncate flex-1">{msg.text}</span>
+                      <span className="text-paper/85 truncate flex-1">{msg.text}</span>
                     </div>
                   )
                 })}
               </div>
               <div className="flex items-center justify-between mt-1 pt-0.5 border-t border-gold/5">
-                <span className="text-[9px] text-paper/15">点击展开</span>
+                <span className="text-[10px] text-paper/60">点击展开</span>
                 <div className="flex items-center gap-2">
                   {unreadCount > 0 && (
-                    <span className="text-[9px] text-cinnabar/50">{unreadCount}新</span>
+                    <span className="text-[10px] text-gold-light">{unreadCount}新</span>
                   )}
                   <button
                     onClick={(e) => { e.stopPropagation(); setMode('hidden') }}
-                    className="text-[9px] text-paper/20 hover:text-cinnabar transition-colors"
+                    className="text-xs text-paper/60 hover:text-cinnabar transition-colors"
                     title="隐藏"
                   >
                     ✕

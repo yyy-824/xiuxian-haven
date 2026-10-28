@@ -133,15 +133,24 @@ export function HavenPanel() {
   const buildableRooms: RoomType[] = ['修炼室', '丹房', '炼器房', '聚灵阵', '藏经阁', '灵田', '灵矿', '会客厅', '寝殿', '练功场']
 
   return (
-    <div className="h-full overflow-y-auto p-4 space-y-4">
+    <div className="h-full overflow-y-auto px-8 pt-8 pb-28">
+      <div className="mx-auto max-w-6xl space-y-8">
+      <div className="flex items-end justify-between gap-6">
+        <div>
+          <p className="mb-2 text-xs tracking-[0.28em] text-gold/70">青云山 · 洞府纪事</p>
+          <h1 className="font-display text-3xl tracking-wide text-paper">洞府经营</h1>
+          <p className="mt-2 text-sm text-paper/60">经营山门，安顿弟子，积蓄灵气。</p>
+        </div>
+        <span className="border-l border-gold/30 pl-4 text-sm text-gold/80">洞府等级 <strong className="ml-2 font-display text-xl text-gold-light">{haven.level}</strong></span>
+      </div>
       {/* 洞府概览 */}
-      <div className="scroll-bg rounded-lg p-4 border border-gold/20">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="font-display text-lg text-ink">洞府概览</h2>
+      <div className="scroll-bg rounded-xl p-6 border border-gold/30 shadow-xl shadow-black/10">
+        <div className="flex items-center justify-between mb-5">
+          <div><p className="mb-1 text-xs tracking-[0.2em] text-ink/55">山门气象</p><h2 className="font-display text-xl text-ink">洞府概览</h2></div>
           {haven.level < 10 && (
             <button
               onClick={upgradeHaven}
-              className="text-xs bg-gold/20 text-gold px-3 py-1 rounded-lg hover:bg-gold/30 transition-colors btn-press border border-gold/30"
+              className="text-sm bg-[#54452f] text-paper px-4 py-2 rounded-lg hover:bg-[#6b5739] transition-colors btn-press"
             >
               ⬆ 升级洞府 (Lv.{haven.level}→{haven.level + 1})
             </button>
@@ -150,30 +159,30 @@ export function HavenPanel() {
             <span className="text-xs text-gold/60">已满级</span>
           )}
         </div>
-        <div className="grid grid-cols-3 gap-3 text-sm">
-          <div className="text-center">
-            <div className="text-ink/60">灵气浓度</div>
-            <div className="text-jade font-display text-xl">{haven.spiritualDensity.toFixed(1)}</div>
+        <div className="grid grid-cols-3 gap-6 text-sm">
+          <div className="border-l border-ink/15 pl-4">
+            <div className="text-ink/70">灵气浓度</div>
+            <div className="text-jade font-display text-2xl mt-1">{haven.spiritualDensity.toFixed(1)}</div>
           </div>
-          <div className="text-center">
-            <div className="text-ink/60">护山强度</div>
-            <div className="text-spirit font-display text-xl">{haven.defense}</div>
+          <div className="border-l border-ink/15 pl-4">
+            <div className="text-ink/70">护山强度</div>
+            <div className="text-spirit font-display text-2xl mt-1">{haven.defense}</div>
           </div>
-          <div className="text-center">
-            <div className="text-ink/60">建筑数</div>
-            <div className="text-cinnabar font-display text-xl">{haven.rooms.length}</div>
+          <div className="border-l border-ink/15 pl-4">
+            <div className="text-ink/70">建筑数</div>
+            <div className="text-cinnabar font-display text-2xl mt-1">{haven.rooms.length}</div>
           </div>
         </div>
         {/* 升级费用提示 */}
         {haven.level < 10 && (
-          <div className="mt-2 text-[10px] text-ink/40 flex flex-wrap gap-2">
+          <div className="mt-5 pt-4 border-t border-ink/10 text-xs text-ink/70 flex flex-wrap gap-3">
             <span>升级费用：</span>
-            <span className={resources.spiritStones >= haven.level * 200 ? 'text-gold' : 'text-cinnabar'}>💎{haven.level * 200}</span>
-            <span className={(resources.materials['灵草'] || 0) >= haven.level * 10 ? 'text-qi' : 'text-cinnabar'}>灵草×{haven.level * 10}</span>
-            <span className={(resources.materials['矿石'] || 0) >= haven.level * 10 ? 'text-qi' : 'text-cinnabar'}>矿石×{haven.level * 10}</span>
-            {haven.level >= 3 && <span className={(resources.materials['精铁'] || 0) >= haven.level * 5 ? 'text-qi' : 'text-cinnabar'}>精铁×{haven.level * 5}</span>}
-            {haven.level >= 5 && <span className={(resources.materials['妖丹'] || 0) >= haven.level * 3 ? 'text-qi' : 'text-cinnabar'}>妖丹×{haven.level * 3}</span>}
-            {haven.level >= 7 && <span className={(resources.materials['灵石矿'] || 0) >= (haven.level - 5) * 2 ? 'text-qi' : 'text-cinnabar'}>灵石矿×{(haven.level - 5) * 2}</span>}
+            <span className={resources.spiritStones >= haven.level * 200 ? 'text-[#66502d]' : 'text-cinnabar'}>💎{haven.level * 200}</span>
+            <span className={(resources.materials['灵草'] || 0) >= haven.level * 10 ? 'text-[#66502d]' : 'text-cinnabar'}>灵草×{haven.level * 10}</span>
+            <span className={(resources.materials['矿石'] || 0) >= haven.level * 10 ? 'text-[#66502d]' : 'text-cinnabar'}>矿石×{haven.level * 10}</span>
+            {haven.level >= 3 && <span className={(resources.materials['精铁'] || 0) >= haven.level * 5 ? 'text-[#66502d]' : 'text-cinnabar'}>精铁×{haven.level * 5}</span>}
+            {haven.level >= 5 && <span className={(resources.materials['妖丹'] || 0) >= haven.level * 3 ? 'text-[#66502d]' : 'text-cinnabar'}>妖丹×{haven.level * 3}</span>}
+            {haven.level >= 7 && <span className={(resources.materials['灵石矿'] || 0) >= (haven.level - 5) * 2 ? 'text-[#66502d]' : 'text-cinnabar'}>灵石矿×{(haven.level - 5) * 2}</span>}
           </div>
         )}
       </div>
@@ -181,10 +190,10 @@ export function HavenPanel() {
       {/* 建筑列表 */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-display text-gold">建筑</h3>
+          <div><p className="mb-1 text-xs tracking-[0.2em] text-gold/60">山门营造</p><h3 className="font-display text-xl text-paper">洞府建筑 <span className="ml-1 text-sm text-paper/50">{haven.rooms.length}</span></h3></div>
           <button
             onClick={() => setShowBuild(!showBuild)}
-            className="text-sm bg-gold/20 text-gold px-3 py-1 rounded-lg hover:bg-gold/30 transition-colors btn-press"
+            className="text-sm bg-gold text-ink font-medium px-4 py-2 rounded-lg hover:bg-gold-light transition-colors btn-press"
           >
             {showBuild ? '取消' : '+ 建造'}
           </button>
@@ -239,36 +248,35 @@ export function HavenPanel() {
         )}
 
         {/* 已建建筑 */}
-        <div className="space-y-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
           {haven.rooms.map(room => (
             <motion.div
               key={room.id}
               layout
-              onClick={() => setSelectedRoom(selectedRoom === room.id ? null : room.id)}
-              className="bg-ink/60 border border-gold/10 rounded-lg p-3 cursor-pointer hover:border-gold/30 card-hover transition-all"
+              className="bg-[#202337]/95 border border-gold/20 rounded-xl p-5 hover:border-gold/50 card-hover transition-all"
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl">{ROOM_ICONS[room.type]}</span>
+                <div className="flex items-center gap-4">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-gold/15 bg-gold/10 text-2xl">{ROOM_ICONS[room.type]}</span>
                   <div>
-                    <div className="font-display text-paper text-sm">
+                    <div className="font-display text-paper text-base">
                       {room.type}
                       <span className="text-gold/60 text-xs ml-1">Lv.{room.level}</span>
                     </div>
-                    <div className="text-xs text-paper/40">{room.description}</div>
+                    <div className="text-sm text-paper/60 mt-1">{room.description}</div>
                     {/* 产出摘要 */}
                     <div className="flex flex-wrap gap-2 mt-1">
-                      {room.production.spiritStones ? <span className="text-[10px] text-gold/70">💎{room.production.spiritStones}/min</span> : null}
-                      {room.production.spiritualEnergy ? <span className="text-[10px] text-spirit/70">🌀{room.production.spiritualEnergy}/min</span> : null}
-                      {room.production.cultivationSpeed ? <span className="text-[10px] text-jade/70">📈修炼+{room.production.cultivationSpeed}%</span> : null}
+                      {room.production.spiritStones ? <span className="text-xs text-gold/80">💎{room.production.spiritStones}/min</span> : null}
+                      {room.production.spiritualEnergy ? <span className="text-xs text-spirit-light/80">🌀{room.production.spiritualEnergy}/min</span> : null}
+                      {room.production.cultivationSpeed ? <span className="text-xs text-jade-light/80">📈修炼+{room.production.cultivationSpeed}%</span> : null}
                       {room.production.materials?.map(m => (
-                        <span key={m.type} className="text-[10px] text-qi/70">📦{m.type}×{m.amount}/min</span>
+                        <span key={m.type} className="text-xs text-qi/80">📦{m.type}×{m.amount}/min</span>
                       ))}
                     </div>
                   </div>
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="text-xs text-paper/50">
+                  <div className="text-xs text-paper/70">
                     👥 {room.assignedDisciples.length}/{room.capacity}
                   </div>
                   {room.level < room.maxLevel && (
@@ -282,11 +290,14 @@ export function HavenPanel() {
                 </div>
               </div>
 
+              <button type="button" onClick={() => setSelectedRoom(selectedRoom === room.id ? null : room.id)} aria-expanded={selectedRoom === room.id} className="mt-4 w-full border-t border-gold/10 pt-3 text-left text-sm text-gold hover:text-gold-light">{selectedRoom === room.id ? "收起详情 ↑" : "查看建筑详情 ↓"}</button>
+
               {/* 展开详情 */}
               {selectedRoom === room.id && (
                 <motion.div
                   initial={{ height: 0 }}
                   animate={{ height: 'auto' }}
+                  onClick={(e) => e.stopPropagation()}
                   className="mt-3 pt-3 border-t border-gold/10"
                 >
                   {/* 分配弟子 */}
@@ -311,7 +322,7 @@ export function HavenPanel() {
                             <button className="text-xs bg-gold/10 text-gold/60 px-2 py-0.5 rounded hover:bg-gold/20">
                               + 分配
                             </button>
-                            <div className="absolute left-0 top-full mt-1 bg-ink border border-gold/20 rounded-lg p-2 hidden group-hover:block z-10 min-w-[150px]">
+                            <div className="absolute left-0 top-full mt-1 bg-ink border border-gold/20 rounded-lg p-2 hidden group-hover:block group-focus-within:block z-10 min-w-[150px]">
                               {disciples
                                 .filter(d => !room.assignedDisciples.includes(d.id))
                                 .map(d => (
@@ -340,6 +351,7 @@ export function HavenPanel() {
             </motion.div>
           ))}
         </div>
+      </div>
       </div>
     </div>
   )
